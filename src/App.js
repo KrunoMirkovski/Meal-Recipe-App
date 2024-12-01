@@ -11,12 +11,24 @@ function App() {
   const [search, setSearch] = useState(""); //To track the user’s input in the search bar
   const [query, setQuery] = useState("pizza"); // Default query; To trigger the API call when the user submits a search.
 
-  return (
-    <div className="App">
-      <h1>Meal Recipe App</h1>
-      <Recipe />
-    </div>
-  );
-}
+  const getRecipes = async () => {
+    const response = await fetch(
+      `https://api.edamam.com/search?q=${query}&app_id=${APP_ID}&app_key=${APP_KEY}`
+    );
+    const data = await response.json();
+    setRecipes(data.hits);
+    // console.log(data);
 
+    useEffect(() => {
+      getRecipes();
+    }, [query]);
+
+    return (
+      <div className="App">
+        <h1>Meal Recipe App</h1>
+        <Recipe />
+      </div>
+    );
+  };
+}
 export default App;
